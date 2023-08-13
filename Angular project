@@ -1,0 +1,6 @@
+1. ng new *projectname*
+2. Always pick Scss files.
+3. Add angular routing
+
+** Setup EsLint and Pretter Configuration **
+
