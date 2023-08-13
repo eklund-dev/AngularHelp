@@ -1,0 +1,85 @@
+Install and configure Prettier
+Even if we have ESLint watching our code for bugs, we also need a tool to better style and format it. That’s where Prettier comes into play.
+
+Prettier is an opinionated code formatter that helps us beautify code in a standardized way every time we save the code.
+
+Open terminal and type:
+npm install prettier --save-dev
+
+Then we need to add .prettierrc.json and .prettierignore files in our root project directory.
+
+Inside .prettierignore it’s better to add whatever we have inside .gitignore file.
+
+Then we can run this command inside our project to format it:
+npx prettier --write .
+
+Inside .prettierrc.json we can change the default settings by overriding them.
+
+The settings I use most of the time are this:
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": true,
+  "semi": true,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "trailingComma": "es5",
+  "bracketSameLine": true,
+  "printWidth": 80
+}
+
+ng add @angular-eslint/schematics
+
+For ESLint and Prettier to play well together, we need to run Prettier as an ESLint plugin. This way we can just call ng lint --fix and ESLint will fix bugs but also format the code.
+Open terminal and type:
+npm install prettier-eslint eslint-config-prettier eslint-plugin-prettier --save-dev
+
+Now we need to edit the .eslintrc.json file to include the prettier plugin.
+{
+  "root": true,
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        ...
+        "plugin:prettier/recommended"
+      ],
+    },
+    // NOTE: WE ARE NOT APPLYING PRETTIER IN THIS OVERRIDE, ONLY @ANGULAR-ESLINT/TEMPLATE
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "rules": {}
+    },
+    // NOTE: WE ARE NOT APPLYING @ANGULAR-ESLINT/TEMPLATE IN THIS OVERRIDE, ONLY PRETTIER
+    {
+      "files": ["*.html"],
+      "excludedFiles": ["*inline-template-*.component.html"],
+      "extends": ["plugin:prettier/recommended"],
+      "rules": {
+        // NOTE: WE ARE OVERRIDING THE DEFAULT CONFIG TO ALWAYS SET THE PARSER TO ANGULAR (SEE BELOW)
+        "prettier/prettier": ["error", { "parser": "angular" }]
+      }
+    }
+  ]
+}
+
+For VS Code we need to add this lines to settings.json:
+{
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+      },
+      "editor.formatOnSave": true
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+      },
+      "editor.formatOnSave": true
+    },
+  }
+
+"eslint.format.enable": true ?? 
